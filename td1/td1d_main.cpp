@@ -123,6 +123,7 @@ timespec timespec_subtract(const timespec& time1_ts, const timespec& time2_ts)
 // TODO: nanosleep()
 // timespec timespec_wait(const timespec& delay_ts){}
 
+// TODO: return par référence pour += ou -= (voir l'énoncé)
 
 timespec operator- (const timespec& time_ts)
 {
@@ -140,7 +141,7 @@ timespec operator- (const timespec& time1_ts, const timespec& time2_ts)
 }
 
 
-timespec operator+= (timespec& time_ts, const timespec& delay_ts)
+timespec& operator+= (timespec& time_ts, const timespec& delay_ts)
 {
 	// Calcul de la somme de 2 instants
 	time_ts.tv_sec = time_ts.tv_sec + delay_ts.tv_sec;
@@ -160,7 +161,7 @@ timespec operator+= (timespec& time_ts, const timespec& delay_ts)
 }
 
 
-timespec operator-= (timespec& time_ts, const timespec& delay_ts)
+timespec& operator-= (timespec& time_ts, const timespec& delay_ts)
 {
 	// Calcul de la différence de 2 instants
 	time_ts.tv_sec = time_ts.tv_sec - delay_ts.tv_sec;
