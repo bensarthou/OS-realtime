@@ -8,43 +8,7 @@
 #include <time.h>
 
 #include <unistd.h>
-/*
-On reprend la fonction incr définie ci-dessus et on la modifie en lui rajoutant un 3e paramètre
- et une valeur de ‎retour :
-unsigned incr(unsigned int nLoops, double* pCounter, bool* pStop).
 
-Comme avant, cette fonction effectue dans sa boucle principale une incrémentation de 1.0 de
- la valeur du compteur ‎passé en paramètre ; la différence avec l’implémentation précédente est que
- la condition d’arrêt peut être atteinte ‎avant d’avoir effectué le nombre maximal de boucles (nLoops),
- dans le cas où le paramètre pointé par pStop passe à ‎la valeur true. Sa valeur de retour est le
- nombre de boucles effectuées (≤ nLoops).
-
-	Modifiez l’implémentation de la fonction incr conformément aux indications ci-dessus.
-
-Ce paramètre pStop est destiné à effectuer des mesures du nombre de boucles effectuées par la
- fonction incr durant des temps d’exécution bien déterminés :
-
-– on déclare dans le main une variable booléenne stop initialisée à false et dont on passera
-	l’adresse en paramètre de incr en tant que pStop ;
-– avant d’appeler incr, on initialise nLoops à sa valeur maximale possible
-	(utilisez la constante UINT_MAX définie dans le header standard <climits>) ;
-– on lance un timer sur un temps bien défini (par exemple 1 seconde) avec un callback
-	dont la fonction est de faire passer la valeur de stop à true : la boucle de incr s’arrêtera
-	alors et renverra le nombre de boucles effectuées durant ce temps.
-
-	Que faut-il modifier dans la déclaration de pStop ?
-
-Soit l(t) le nombre de boucles effectuées par la fonction incr durant l’intervalle de temps t ;
- on suppose que ‎cette fonction est affine : l(t)=a×t+b.
- Soit iLoop la variable comptant la boucle dans la fonction incr
- (dans l’expression for(iLoop=0 ; iLoop < nLoops ; ++iLoop))
-
-	Implémentez une fonction calib établissant les valeurs de a et b en mesurant la valeur de iLoop
-	 pour 4 ‎secondes et pour 6 secondes‎.
-	Vérifiez par programme (en utilisant la fonction clock_gettime vue ci-dessus)
-	que votre calibration est correcte.‎
-
-*/
 using namespace std;
 
 struct Linear

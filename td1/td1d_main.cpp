@@ -101,6 +101,7 @@ timespec timespec_add(const timespec& time1_ts, const timespec& time2_ts)
 	return res;
 }
 
+
 timespec timespec_subtract(const timespec& time1_ts, const timespec& time2_ts)
 {
 	struct timespec res;
@@ -120,20 +121,37 @@ timespec timespec_subtract(const timespec& time1_ts, const timespec& time2_ts)
 	return res;
 }
 
-// TODO: nanosleep()
-// timespec timespec_wait(const timespec& delay_ts){}
 
-// TODO: return par référence pour += ou -= (voir l'énoncé)
+timespec timespec_wait(const timespec& delay_ts)
+{
+	struct timespec res;
+
+	res.tv_nsec = 0;
+	res.tv_sec = 0.0;
+
+	if(nanosleep(&delay_ts , &res) < 0 )
+	{
+		printf("Nano sleep system call failed \n");
+		return res;
+	}
+
+	printf("Nano sleep successfull \n");
+
+	return res;
+}
+
 
 timespec operator- (const timespec& time_ts)
 {
 	return timespec_negate(time_ts);
 }
 
+
 timespec operator+ (const timespec& time1_ts, const timespec& time2_ts)
 {
 	return timespec_add(time1_ts, time2_ts);
 }
+
 
 timespec operator- (const timespec& time1_ts, const timespec& time2_ts)
 {
@@ -250,7 +268,7 @@ void print_timespec(const timespec& ts)
 int main()
 {
 
-	struct timespec time1, time2, time3;
+	struct timespec time1, time2, time3, time4;
 	double ms = -3578.48912345;
 
 	time1.tv_sec = -100;
@@ -261,6 +279,9 @@ int main()
 
 	time3.tv_sec = 2;
 	time3.tv_nsec = 500000000.;
+
+	time4.tv_sec = 5;
+	time4.tv_nsec = 0.0;
 
 	printf("----- Ms to timespec\n");
 	print_timespec(timespec_from_ms(ms));
@@ -349,7 +370,19 @@ int main()
 	print_timespec(ts_equal);
 	printf("%s\n", (ts_equal != timespec_from_ms(ms3)) ? "true" : "false");
 
+	printf("\n------ TESTING WAIT FUNC --------- \n");
+	printf("We'll print a loop that will pause for 5 secs\n");
+	struct timespec res_sleep;
 
+	for(int i=0; i<10; i++)
+	{
+		printf("iter %d\n", i);
+		if (i==2)
+		{
+			res_sleep = timespec_wait(time4);
+		}
+	}
 
-
+	printf("Leftover time in the nanosleep process\n");
+	print_timespec(res_sleep);
 }
