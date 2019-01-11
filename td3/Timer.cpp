@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include <time.h>
+#include "timespec_op.h"
 
 Timer::Timer()
 {
@@ -26,10 +27,10 @@ void Timer::start(double duration_ms)
 {
 
 	struct itimerspec its;
-	its.it_value.tv_sec= duration_ms/1000;
-	its.it_value.tv_nsec = (duration_ms-its.it_value.tv_sec*1000)*1000000;
-	its.it_interval.tv_sec=0;
-	its.it_interval.tv_nsec = 0;
+
+	its.it_value = timespec_from_ms(duration_ms);
+	its.it_interval = timespec_from_ms(0.0);
+
 	timer_settime(tid,0,&its,NULL);
 }
 
@@ -37,10 +38,10 @@ void Timer::start(double duration_ms)
 void Timer::stop()
 {
 	struct itimerspec stop;
-	stop.it_value.tv_sec = 0;
-	stop.it_value.tv_nsec = 0;
-	stop.it_interval.tv_sec = 0;
-	stop.it_interval.tv_nsec = 0;
+
+	stop.it_value = timespec_from_ms(0.0);
+	stop.it_interval = timespec_from_ms(0.0);
+
 	timer_settime(tid,0,&stop,NULL);
 }
 
