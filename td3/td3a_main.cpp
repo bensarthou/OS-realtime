@@ -8,15 +8,16 @@ using namespace std;
 
 int main()
 {
+	cout << "We will start, stop and reset timer every 5 seconds"
 	Chrono chrono;
 	int i = 0;
 	while(i<10){
-		cout<<"Starting chrono, timer is: "<<chrono.lap()<<" s."<<endl;
+		cout<<"Chrono starts, timer is at "<<chrono.lap()<<" ms. We will pause 5 seconds"<<endl;
 		sleep(5);
 		chrono.stop();
-		cout<<"Stopping chrono, timer is: "<<chrono.lap()<<" s."<<endl;
+		cout<<"Chrono stops, timer is at "<<chrono.lap()<<" ms."<<endl;
 		chrono.restart();
-		cout<<"Restarting chrono, now!"<<endl;
+		cout<< "Chrono restarts" <<endl;
 		i++;
 	}
 }

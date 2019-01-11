@@ -1,6 +1,7 @@
 #include "Countdown.h"
 #include <cstdlib>
 #include <cstdio>
+#include <time.h>
 
 Countdown::Countdown(int* pCounter)
 {

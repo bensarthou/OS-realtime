@@ -1,6 +1,5 @@
 #include "PeriodicTimer.h"
 
-
 class Countdown : public PeriodicTimer
 {
 	private:
