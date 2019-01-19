@@ -1,3 +1,6 @@
+#ifndef Chrono_h_INCLUDED
+#define Chrono_h_INCLUDED
+
 #include <time.h>
 #include "timespec_op.h"
 
@@ -35,3 +38,5 @@ class Chrono
 		double lap();
 
 };
+
+#endif

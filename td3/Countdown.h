@@ -1,3 +1,6 @@
+#ifndef Countdown_h_INCLUDED
+#define Countdown_h_INCLUDED
+
 #include "PeriodicTimer.h"
 
 class Countdown : public PeriodicTimer
@@ -13,3 +16,4 @@ class Countdown : public PeriodicTimer
 		~Countdown();
 
 };
+#endif

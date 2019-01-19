@@ -262,6 +262,6 @@ bool operator> (const timespec& time1_ts, const timespec& time2_ts)
 
 void print_timespec(const timespec& ts)
 {
-	printf("timespec:(%d s, %d ns) = %f ms\n",
+	printf("timespec:(%ld s, %ld ns) = %f ms\n",
 			ts.tv_sec, ts.tv_nsec, ts.tv_sec*1000. + ts.tv_nsec/1000000.);
 }

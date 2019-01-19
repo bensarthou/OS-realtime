@@ -1,3 +1,6 @@
+#ifndef Timer_h_INCLUDED
+#define Timer_h_INCLUDED
+
 #include <time.h>
 #include <signal.h>
 #include "timespec_op.h"
@@ -29,3 +32,4 @@ class Timer
 		/* Virtual callback definition, to be implemented in a derivate class */
 		virtual void callback()=0;
 };
+#endif

@@ -1,4 +1,6 @@
 #include "Timer.h"
+#include "timespec_op.h"
+
 #include <time.h>
 
 class PeriodicTimer : public Timer

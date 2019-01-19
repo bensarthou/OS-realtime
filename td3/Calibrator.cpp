@@ -13,7 +13,7 @@ Calibrator::Calibrator(double samplingPeriod_ms, unsigned int nSamples)
 	//will call regurlaly getSample() and stopLoop() on the thread running the
 	//periodicTimer instance
 	a = (samples.back()-samples.front())/((nSamples-1)*samplingPeriod_ms);
-	b = samples.front()-samplingPeriod_ms*a;
+	b = samples.back()-samplingPeriod_ms*a;
 }
 
 

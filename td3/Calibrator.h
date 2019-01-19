@@ -1,3 +1,6 @@
+#ifndef Calibrator_h_INCLUDED
+#define Calibrator_h_INCLUDED
+
 #include "PeriodicTimer.h"
 #include "Looper.h"
 
@@ -40,3 +43,4 @@ class Calibrator : public PeriodicTimer
 		/* Gets last value of loop */
 		double getLastValue();
 };
+#endif
