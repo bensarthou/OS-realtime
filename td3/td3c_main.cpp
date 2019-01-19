@@ -43,7 +43,7 @@ int main()
 
 }
 
-/* class Thread::Exception : public std::exception
+/* class Posix::Exception : public std::exception
  { public:
 	Exception(const std:string& msg) : msg(msg)
 	virtual const char* what() const noexcept {return msg.c_str()}

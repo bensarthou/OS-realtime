@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 	pthread_attr_setschedparam(&attr, &schedParams);
 	for(int i=0; i<nTasks; i++)
 	{
-		pthread_create(&tabThreads[i], NULL, call_incr, &sharedVar);
+		pthread_create(&tabThreads[i], &attr, call_incr, &sharedVar);
 	}
 
 	for(int i=0; i<nTasks; i++)
