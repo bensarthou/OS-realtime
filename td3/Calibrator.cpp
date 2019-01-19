@@ -1,5 +1,6 @@
 #include "Calibrator.h"
 #include <cfloat>
+#include "linreg.h"
 
 Calibrator::Calibrator(double samplingPeriod_ms, unsigned int nSamples)
 {
@@ -12,8 +13,15 @@ Calibrator::Calibrator(double samplingPeriod_ms, unsigned int nSamples)
 	//Here the loop takes the main thread, but the callback function of Calibrator
 	//will call regurlaly getSample() and stopLoop() on the thread running the
 	//periodicTimer instance
-	a = (samples.back()-samples.front())/((nSamples-1)*samplingPeriod_ms);
-	b = samples.back()-samplingPeriod_ms*a;
+	// a = (samples.back()-samples.front())/((nSamples-1)*samplingPeriod_ms);
+	// b = samples.back()-samplingPeriod_ms*a;
+
+	for(double t=0; t<=nSamples; t++ )
+	{
+		times.push_back(t*samplingPeriod_ms);
+	}
+
+	linear_regression(times, samples, a, b, r);
 }
 
 

@@ -13,6 +13,11 @@ class Calibrator : public PeriodicTimer
 		double a;
 		double b;
 
+		// regression factor
+		double r;
+		// vector storing times at wich values are sampled
+		std::vector<double> times;
+
 		// Vector storing all sampled values
 		std::vector<double> samples;
 
