@@ -1,30 +1,31 @@
 #include <time.h>
 #include <pthread.h>
 #include "PosixThread.h"
+#include "Thread.h"
 #include "timespec_op.h"
 
 
 Thread::Thread(){}
 Thread::~Thread(){}
 
-static void* Thread::call_run(void* v_thread)
+void* Thread::call_run(void* v_thread)
 {
-	Thread* p_th = (Thread*) v_th;
+	Thread* p_th = (Thread*) v_thread;
+    startTime = timespec_now();
 	p_th->run();
-	return v_th;
+    stopTime = timespec_now();
+	return v_thread;
 }
 
 
-void start()
+void Thread::start()
 {
-	startTime = timespec_now();
-	PosixThread::start(); // TODO: arg ?
+	PosixThread::start(call_run, (void*) this);
 }
 
-static void Thread::sleep_ms(double delay_ms)
+void Thread::sleep_ms(double delay_ms)
 {
 	struct timespec delay = timespec_from_ms(delay_ms);
-	totalSleepTime += delay;
 	timespec_wait(delay);
 }
 
@@ -37,13 +38,12 @@ double Thread::startTime_ms()
 
 double Thread::stopTime_ms()
 {
-	// TODO: when to set stopTime ??
 	return timespec_to_ms(stopTime);
 }
 
 
 double Thread::execTime_ms()
 {
-	struct timespec elapsedTime = stopTime - startTime - totalSleepTime;
+	struct timespec elapsedTime = stopTime - startTime;
 	return timespec_to_ms(elapsedTime);
 }

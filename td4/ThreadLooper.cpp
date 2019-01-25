@@ -2,7 +2,7 @@
 
 
 //constructeur
-ThreadLooper::ThreadLooper(Looper* looper, double nLoops)  : Thread(SCHED_OTHER), looper(looper),nLoops(nLoops){}
+ThreadLooper::ThreadLooper(Looper* looper, double nLoops)  : Thread(), looper(looper),nLoops(nLoops){}
 
 void ThreadLooper::run()
 {

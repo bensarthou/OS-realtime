@@ -10,7 +10,7 @@
 class Thread : public PosixThread
 {
 	private:
-		struct timespec startTime, stopTime, totalSleepTime;
+		static struct timespec startTime, stopTime;
 		static void* call_run(void* v_thread);
 
 	protected:
@@ -33,7 +33,6 @@ class Thread : public PosixThread
 		double stopTime_ms();
 		double execTime_ms();
 
-		/* TODO: We need to define this function better ...*/
 		void start();
 };
 #endif

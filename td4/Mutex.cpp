@@ -4,7 +4,7 @@
 
 
 /* Constructor */
-Mutex()
+Mutex::Mutex()
 {
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
@@ -13,29 +13,29 @@ Mutex()
 
 
 /* Destructor */
-~Mutex()
+Mutex::~Mutex()
 {
 	pthread_mutex_destroy(&posixId);
 }
 
 
 /* lock the mutex */
-void lock()
+void Mutex::lock()
 {
 	pthread_mutex_lock(&posixId);
 }
 
 
-bool lock(double timeout_ms)
+bool Mutex::lock(double timeout_ms)
 {
 
 	struct timespec abs_time = timespec_now() + timespec_from_ms(timeout_ms);
-	pthread_mutex_timedlock(&posixId, &abs_time)
+	pthread_mutex_timedlock(&posixId, &abs_time);
 
 }
 
 
-bool trylock()
+bool Mutex::trylock()
 {
 	if(pthread_mutex_trylock(&posixId) == 0)
 	{
@@ -48,7 +48,7 @@ bool trylock()
 }
 
 
-void unlock()
+void Mutex::unlock()
 {
 	pthread_mutex_unlock(&posixId);
 }
