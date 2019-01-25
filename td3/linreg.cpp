@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <numeric>
 #include <cmath>
+#include <iostream>
 
 #include "linreg.h"
 
@@ -14,6 +15,19 @@ void linear_regression(std::vector<double> const &x, std::vector<double> const &
 		printf("%ld:%ld", x.size(), y.size());
 		throw std::runtime_error{"Vectors don't have the same size"};
 	}
+
+	// DEBUG:
+	// for (std::vector<double>::const_iterator i = x.begin(); i != x.end(); ++i)
+	// {
+	//     std::cout << *i << ' ';
+	// }
+	//
+	// for (std::vector<double>::const_iterator i = y.begin(); i != y.end(); ++i)
+	// {
+	//     std::cout << *i << ' ';
+	// }
+
+
 	const double n = x.size();
 	const double sum_x = std::accumulate(x.begin(), x.end(), 0.0);
 	const double sum_y = std::accumulate(y.begin(), y.end(), 0.0);
@@ -32,5 +46,5 @@ void linear_regression(std::vector<double> const &x, std::vector<double> const &
 	// }
 
 	// False equation
-	// r = (n * sum_xy - sum_x * sum_y) / sqrt( (n * sum_xx - sum_x*sum_x) * (n* sum_yy - sum_y*sum_y));
+	r = (n * sum_xy - sum_x * sum_y) / sqrt( (n * sum_xx - sum_x*sum_x) * (n* sum_yy - sum_y*sum_y));
 }

@@ -19,7 +19,7 @@ int main()
 	Calibrator calibrator(duration_ms, n_samples);
 
 	cout << "Last value of loop is: " << calibrator.getLastValue() << endl;
-	cout << "Estimated last value from calibration: " << calibrator.nLoops(duration_ms) << endl;
+	cout << "Estimated last value from calibration: " << calibrator.nLoops(n_samples*duration_ms) << endl;
 
 	cout << "If the two are equal, then we have successfully calibrated our loop" << endl;
 
@@ -32,19 +32,14 @@ int main()
 
 	// start a chrono to measure time
 	Chrono chrono;
+    cout<<"Chrono starts, timer is at "<< chrono.lap()<<" ms. Running "<< duration_loop << "ms loop" <<endl;
 
 	// ask the cpu loop object to run the loop according to the calibration
-	cpuloop_obj.runLoop(duration_loop);
+	cpuloop_obj.runTime(duration_loop);
 
 	// measure and print loop execution time
 	chrono.stop();
-	cout<<"Chrono stops, timer is at "<< chrono.stopTime()<<" ms."<<endl;
+	cout<<"Chrono stops, timer is at "<< chrono.lap()<<" ms."<<endl;
 
 
 }
-
-/* class Posix::Exception : public std::exception
- { public:
-	Exception(const std:string& msg) : msg(msg)
-	virtual const char* what() const noexcept {return msg.c_str()}
-} */

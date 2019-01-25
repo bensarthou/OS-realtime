@@ -8,7 +8,7 @@ using namespace std;
 
 int main()
 {
-	cout << "We will start, stop and reset timer every 5 seconds"
+	cout << "We will start, stop and reset timer every 5 seconds" << endl;
 	Chrono chrono;
 	int i = 0;
 	while(i<10){

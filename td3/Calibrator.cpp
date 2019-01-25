@@ -1,6 +1,7 @@
 #include "Calibrator.h"
 #include <cfloat>
 #include "linreg.h"
+#include <iostream>
 
 Calibrator::Calibrator(double samplingPeriod_ms, unsigned int nSamples)
 {
@@ -22,6 +23,8 @@ Calibrator::Calibrator(double samplingPeriod_ms, unsigned int nSamples)
 	}
 
 	linear_regression(times, samples, a, b, r);
+	std::cout << "Les paramètres (a, b) de la régression sont:"<< a <<"|" << b << std::endl;
+
 }
 
 
@@ -38,7 +41,7 @@ double Calibrator::nLoops(double duration_ms)
 
 double Calibrator::getLastValue()
 {
-	return(samples.front());
+	return(samples.back());
 }
 
 
