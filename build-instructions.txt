@@ -1,0 +1,59 @@
+Ce petit build system pour les TD fonctionne de la manière suivante:
+
+ORGANISATION DES RÉPERTOIRES DE TRAVAIL ET DE L'ENVIRONNEMENT:
+=============================================================
+Les codes sources sont tous les fichers headers simples (.h) implémentation (.cpp) et header templates (.hpp).
+Ces codes sources sont édités dans les sous-répertoires td1, td2, etc. Le build system fonctionne avec tout sous-répertoire dont le nom est de la forme td{x}{y} où {x} et {y} sont n'importe quel chaine ASCII.
+Les fichiers exécutables construits doivent avoir un suffixe représentant la plateforme sur laquelle ils s'exécutent: 
+- pour les exécutables de la station de travail, ils portent le suffixe .exe (par exemple td1.exe)
+- pour les exécutables de la RaspberryPi2, ils portent le suffixe .rpi2 (par exemple td1.rpi2)
+
+Deux variables d'environnement sont nécessaires: ${CROSS_COMPILE} ${BUILD_EXT} et ${BUILD_DIR}
+${CROSS_COMPILE} doit être:
+  - vide ("" ou non-défini) pour travailler sur la station de travail Linux
+  - égale à "arm-linux-" pour travailler sur la RaspberryPi2.
+
+${BUILD_EXT} représente l'extension des exécutables (".exe" pour la station hôte, ".rpi2" pour la RaspberryPi2.
+${BUILD_DIR} est le répertoire de build pour tous les binaires; il est formé à partir de l'extension: build.${BUILD_EXE}
+Les produits de compilation (fichiers .o) sont placés dans le dossier ${BUILD_DIR}/obj
+Les headers (fichiers .h et .hpp) sont copiés dans le dossier ${BUILD_DIR}/include
+Les librairies binaires (libpmrtos.so) sont placés dans le dossier ${BUILD_DIR}/lib
+Les exécutables sont placés dans le dossier ${BUILD_DIR}
+
+=====>>> Mais vous n'avez pas à les définir vous-mêmes ces variables d'environnement ! <<<===
+  - pour travailler sur la plateforme hôte (station Linux) il n'y a rien à faire: il suffit d'ouvrir un nouveau terminal
+  - pour travailler sur la plateforme RaspberryPi2, il suffit d'ouvrir un nouveau terminal et de "sourcer" le fichier rpi2env.bash:
+    . rpi2env.bash
+
+PRODUCTION DES BINAIRES:
+=======================
+La construction des exécutables se fait en 2 temps:
+1) la construction de la librairie dynamique pmrtos (Programmation Multitâche Real Time Operating System) à partir de tous les fichiers source de type .cpp
+2) la construction de l'exécutable à partir d'un fichier td{x}{y}_main.cpp implémentant le main() et de la librairie pmrtos (fichier libpmrtos.so)
+
+Tous les fichiers produits sont placés dans le répertoire build de la plateforme d'exécution: build.exe pour la binaire de la station, build.rpi2 pour les binaires RaspberryPi2.
+La construction de la libraire pour td{x}{y} se fait par l'appel:
+  ./libbuild.bash {x}
+
+Exemple pour les dossiers td1 et td-test: 
+  ./libbuild.bash 1
+  ./libbuild.bash -test
+
+Puis le binaire exécutable est construit par l'appel (même paramètre de dossier et le paramètre du numéro de question):
+  ./exebuild.bash {x} {y}
+
+Exemples pour les exercices td1a et td-test-1:
+  ./exebuild.bash 1 a
+  ./exebuild.bash -test -1
+
+TRANSFERT SUR PLATEFORME ET EXÉCUTION:
+=====================================
+Les exécutables sont produits dans le dossier ${BUILD_DIR}
+
+Pour exécuter un exécutable hôte, il faut, indiquer le chemin le la librairie par la variable $LD_LIBRARY_PATH avant la commande d'exécution:
+  LD_LIBRARY_PATH=./build.exe/lib ./build.exe/td1a.exe
+
+Pour exécuter un exécutable rpi2, il faut d'abord copier (par la copie ssh 'scp') la librairie et l'exécutable aux bons emplacements.
+  En supposant que votre Raspberry porte le numéro xy:
+  scp build.rpi2/lib/*.so* root@192.168.50.xy:/usr/lib
+  scp build.rpi2/td1a.rpi2 root@192.168.50.xy:
