@@ -2,8 +2,20 @@
 #define MUTEX_H
 
 #include <pthread.h>
+#include <exception>
+#include <string>
 
-class Mutex {
+using namespace std;
+
+class Mutex
+{
+
+    private:
+        pthread_mutex_t posixId;
+        pthread_cond_t posixCondId;
+
+    protected:
+
 	public:
 		/* Constructor */
 		Mutex();
@@ -19,11 +31,45 @@ class Mutex {
 		bool trylock();
 		void unlock();
 
-	protected:
+    private:
+        class Lock
+        {
+            class TimeoutException : public exception
+            {
+                public:
+                    TimeoutException(const std::string& msg) : msg(msg){}
+                    virtual const char* what() const noexcept {return msg.c_str();}
+                public:
+                    const std::string msg;
+            };
 
-	private:
-		pthread_mutex_t posixId;
-		pthread_cond_t posixCondId; // TODO: ça sert à quoi ??
+            public:
+                /* Constructor */
+                Lock(Mutex& m);
+                Lock(Mutex& m, double timeout_ms);
+
+                /* Destructor */
+                ~Lock();
+
+                /* ask the thread to wait depending on the condition in posixCondId */
+                void wait();
+
+                /* ask the thread to wait depending on the condition in posixCondId */
+                bool wait(double timeout_ms);
+
+                /* notify the thread that the condition has freed */
+                void notify();
+
+                /* notify all threads that conditions have freed */
+                void notifyAll();
+
+            private:
+
+                Mutex& m;
+
+        };
+
+
 };
 
 #endif
