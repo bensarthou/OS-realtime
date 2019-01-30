@@ -6,6 +6,7 @@
 /* Constructor */
 Mutex::Mutex()
 {
+    // TODO: may be missing condition (or the way to set it)
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&posixId, &attr);
@@ -54,6 +55,8 @@ void Mutex::unlock()
 {
 	pthread_mutex_unlock(&posixId);
 }
+
+
 
 /*****************************************/
 /*               Lock               */
@@ -110,3 +113,19 @@ void Mutex::Lock::notifyAll()
 {
 	pthread_cond_broadcast(&(m.posixCondId));
 }
+
+
+
+/*****************************************/
+/*               TryLock               */
+/*****************************************/
+
+
+
+// Mutex::TryLock::TryLock(Mutex& m) : m(m)
+// {
+// 	if(!(m.trylock()))
+// 	{
+// 		throw TimeoutException("Mutex couldnt been locked");
+// 	}
+// }
