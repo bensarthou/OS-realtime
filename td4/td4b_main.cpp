@@ -54,7 +54,8 @@ int main(int argc, char* argv[])
 	std::cout << "Get counter from looper: " << *(incr.getSample()) <<", should be "<< nLoops*nTasks << std::endl;
 }
 
-// Question: tâche cons/prod
-// Appel à unlock dans destructeur de TryLock
+// Question: tâche cons/prod -> juste give/take ? 
 // FIFO ?!
+// Appel à unlock dans destructeur de TryLock
 // td4_main
+// tester timeout de Lock/tryLock

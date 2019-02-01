@@ -4,14 +4,13 @@
 #include "Thread.h"
 #include "Semaphore.h"
 
-class threadConsumer : public Thread
+class ThreadConsumer : public Thread
 {
 	private:
-		bool stop;
+		Semaphore& sem;
+		double timeout_ms;
 		int approved;
 		int denied;
-		Semaphore* sem;
-		double timeout_ms;
 
 	protected:
 		void run();
@@ -19,9 +18,7 @@ class threadConsumer : public Thread
 	public:
 		int getApproved();
 		int getDenied();
-		int getID();
-		void setStop(bool s);
-		ThreadConsumer(Semaphore* sem, double timeout_ms);
+		ThreadConsumer(Semaphore& sem, double timeout_ms);
 };
 
 #endif

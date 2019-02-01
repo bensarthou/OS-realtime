@@ -69,6 +69,3 @@ int main(int argc, char* argv[])
 
 	std::cout << "Get counter from looper: " << *(incr_2.getSample()) <<", should be "<< nLoops*nTasks << std::endl;
 }
-
-// Question: tâche cons/prod
-// Appel à unlock dans destructeur de TryLock
