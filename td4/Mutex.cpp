@@ -69,6 +69,9 @@ Mutex::Lock::Lock(Mutex& mutex) : m(mutex)
 }
 
 
+Mutex::Lock::Lock(Mutex& mutex, bool useless) : m(mutex){}
+
+
 Mutex::Lock::Lock(Mutex& mutex, double timeout_ms) : m(mutex)
 {
 	if(!(m.lock(timeout_ms)))
@@ -96,7 +99,6 @@ bool Mutex::Lock::wait(double timeout_ms)
 
 	if(pthread_cond_timedwait(&(m.posixCondId), &(m.posixId), &abs_time) == ETIMEDOUT)
 	{
-		throw TimeoutException("Wait for mutex has timeout");
 		return false;
 	}
 	return true;
@@ -121,7 +123,7 @@ void Mutex::Lock::notifyAll()
 /*****************************************/
 
 
-Mutex::TryLock::TryLock(Mutex& mutex) : Mutex::Lock(mutex)
+Mutex::TryLock::TryLock(Mutex& mutex) : Mutex::Lock(mutex, true)
 {
 	if(!(mutex.trylock()))
 	{

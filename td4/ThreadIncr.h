@@ -16,4 +16,18 @@ class ThreadIncr: public Thread
 		Incr* incr;
 		double nLoops;
 };
+
+
+class ThreadProtectedIncr: public Thread
+{
+	public:
+		ThreadProtectedIncr(ProtectedIncr* incr, double nLoops);
+
+	protected:
+		void run();
+
+	private:
+		ProtectedIncr* incr;
+		double nLoops;
+};
 #endif

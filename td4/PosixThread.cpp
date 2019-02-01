@@ -49,7 +49,12 @@ bool PosixThread::join(double timeout_ms)
 {
 
 	const timespec timeout = timespec_from_ms(timeout_ms);
-	pthread_timedjoin_np(posixId, NULL, &timeout);
+	if(pthread_timedjoin_np(posixId, NULL, &timeout)==ETIMEDOUT)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 

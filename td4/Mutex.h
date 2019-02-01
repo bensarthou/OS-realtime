@@ -70,6 +70,9 @@ class Mutex::Lock
 	protected:
 
 		Mutex& m;
+
+		// Useless constructor, for use in TryLock() without locking the mutex in Lock()
+		Lock(Mutex& m, bool useless);
 };
 
 

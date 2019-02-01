@@ -10,7 +10,7 @@ mkdir -p ${BUILD_DIR}/include
 mkdir -p ${BUILD_DIR}/lib
 mkdir -p ${BUILD_DIR}/obj
 SrcFiles=`ls td$1/*.cpp | grep -v main`
-${CROSS_COMPILE}g++ -std=c++11 -c -g -fpic -I${BUILD_DIR}/include ${SrcFiles}
+${CROSS_COMPILE}g++ -std=c++11 -Wall -c -g -fpic -I${BUILD_DIR}/include ${SrcFiles}
 mv *.o ${BUILD_DIR}/obj/
 ${CROSS_COMPILE}g++ -shared -o libpmrtos.so ${BUILD_DIR}/obj/*.o
 mv libpmrtos.so ${BUILD_DIR}/lib/

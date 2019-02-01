@@ -57,7 +57,7 @@ double* ProtectedIncr::runLoop(double nLoops=DBL_MAX)
 	int i = 0;
 	while ((i<nLoops) && (doStop == false) )
 	{
-		Mutex::TryLock lock(mutex);
+		Mutex::Lock lock(mutex);
 		*counter+= 1.0;
 		i++;
 	}
