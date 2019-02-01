@@ -77,7 +77,6 @@ class Mutex::TryLock : public Mutex::Lock
 {
 	public:
 		TryLock(Mutex& m);
-		~TryLock();
 
 	public:
 		class TimeoutException : public exception

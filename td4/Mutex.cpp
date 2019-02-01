@@ -121,7 +121,6 @@ void Mutex::Lock::notifyAll()
 /*****************************************/
 
 
-
 Mutex::TryLock::TryLock(Mutex& mutex) : Mutex::Lock(mutex)
 {
 	if(!(mutex.trylock()))

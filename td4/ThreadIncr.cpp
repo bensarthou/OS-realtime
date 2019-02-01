@@ -1,5 +1,4 @@
 #include "ThreadIncr.h"
-#include "Mutex.h"
 
 //constructeur
 ThreadIncr::ThreadIncr(Incr* incr_, double nLoops_)

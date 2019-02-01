@@ -1,9 +1,11 @@
 #ifndef INCR_H
 #define INCR_H
 
+#include "Mutex.h"
+
 class Incr
 {
-	private:
+	protected:
 
 		bool doStop; // stop the loop when true
 		double* counter; // pointer to a counter which will be incremented
@@ -30,4 +32,24 @@ class Incr
 		double* stopLoop();
 
 };
+
+
+class ProtectedIncr : public Incr
+{
+
+	private:
+		Mutex& mutex;
+
+	public:
+
+		/* Constructor with passage of reference to the counter, and mutex */
+		ProtectedIncr(double* counter_, Mutex& mutex);
+
+
+		/* run a certain number of loops, with mutex protecting the counter */
+		double* runLoop(double nLoops);
+
+};
+
+
 #endif
