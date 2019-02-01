@@ -8,52 +8,64 @@
 
 int main(int argc, char* argv[])
 {
-    double nLoops = atof(argv[1]);
-    int nTasks = atoi(argv[2]);
-    double counter = 0;
-    std::cout << "Counter value initialised at 0" << std::endl;
+	(void)argc;
+	std::cout << "Please input number of loops for the incrementer, and the number of threads you want to call: "<< std::endl;
 
-    Incr incr(&counter);
+	double nLoops = atof(argv[1]);
+	int nTasks = atoi(argv[2]);
+	double counter = 0;
+	std::cout << "Counter value initialised at 0" << std::endl << std::endl;
 
-    // Create tab of ThreadIncr
-    std::vector<ThreadIncr> tabThreads;
+	Incr incr(&counter);
 
-    std::cout << "Calling " << nTasks << " threads once at a time, incrementing counter for " << nLoops << " each" << std::endl;
+	// Create tab of ThreadIncr
+	std::vector<ThreadIncr> tabThreads;
 
-    for(int i=0; i<nTasks; i++)
-    {
-        tabThreads.push_back(ThreadIncr(&incr, nLoops));
-        tabThreads[i].start();
-        tabThreads[i].join();
-        std::cout << "Get counter from looper:" << *(incr.getSample()) << std::endl;
-    }
+	std::cout << "Calling " << nTasks << " threads once at a time, incrementing counter for " << nLoops << " each" << std::endl;
 
-    Incr incr_2(&counter);
+	for(int i=0; i<nTasks; i++)
+	{
+		tabThreads.push_back(ThreadIncr(&incr, nLoops));
+		tabThreads[i].start();
+		tabThreads[i].join();
+		std::cout << ">>>> Get counter from looper: " << *(incr.getSample()) << std::endl;
+	}
 
-    // Create tab of ThreadIncr
-    std::vector<ThreadIncr> tabThreads_2;
+	std::cout << std::endl;
+	counter = 0;
+	Incr incr_2(&counter);
 
-    std::cout << "Calling " << nTasks << " threads at once (no mutex), incrementing counter for " << nLoops << " each" << std::endl;
+	// Create tab of ThreadIncr
+	std::vector<ThreadIncr> tabThreads_2;
 
-    for(int i=0; i<nTasks; i++)
-    {
-        tabThreads_2.push_back(ThreadIncr(&incr_2, nLoops));
-    }
+	std::cout << "Calling " << nTasks << " threads at once (no mutex), incrementing counter for " << nLoops << " each" << std::endl;
 
-    std::cout << "Starting the threads" << std::endl;
+	for(int i=0; i<nTasks; i++)
+	{
+		tabThreads_2.push_back(ThreadIncr(&incr_2, nLoops));
+	}
 
-    for(int i=0; i<nTasks; i++)
-    {
-        tabThreads_2[i].start();
-    }
+	std::cout << "Starting the threads" << std::endl;
 
-    std::cout << "Closing the threads" << std::endl;
+	for(int i=0; i<nTasks; i++)
+	{
+		tabThreads_2[i].start();
+		if(i%2==0)
+		{
+			std::cout << ">>>> Making calling thread sleeps for 1000. ms" << std::endl;
+			tabThreads_2[i].sleep_ms(1000.);
+		}
+	}
 
-    for(int i=0; i<nTasks; i++)
-    {
-        tabThreads_2[i].join();
-    }
+	std::cout << "Closing the threads" << std::endl << std::endl;
 
-    std::cout << "Get counter from looper:" << *(incr_2.getSample()) << std::endl;
+	std::cout << "Exec time of the thread no: " << std::endl;
 
+	for(int i=0; i<nTasks; i++)
+	{
+		tabThreads_2[i].join();
+		std::cout << i << " is: " << tabThreads_2[i].execTime_ms() << std::endl;
+	}
+
+	std::cout << "Get counter from looper: " << *(incr_2.getSample()) <<", should be "<< nLoops*nTasks << std::endl;
 }

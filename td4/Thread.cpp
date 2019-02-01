@@ -11,9 +11,9 @@ Thread::~Thread(){}
 void* Thread::call_run(void* v_thread)
 {
 	Thread* p_th = (Thread*) v_thread;
-    p_th->startTime = timespec_now();
+	p_th->startTime = timespec_now();
 	p_th->run();
-    p_th->stopTime = timespec_now();
+	p_th->stopTime = timespec_now();
 	return v_thread;
 }
 
@@ -22,6 +22,7 @@ void Thread::start()
 {
 	PosixThread::start(call_run, (void*) this);
 }
+
 
 void Thread::sleep_ms(double delay_ms)
 {
