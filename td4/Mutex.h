@@ -67,32 +67,29 @@ class Mutex::Lock
 		/* notify all threads that conditions have freed */
 		void notifyAll();
 
-	private:
+	protected:
 
 		Mutex& m;
 };
 
 
-// class Mutex::TryLock : public Mutex::Lock
-// {
-//     public:
-//         TryLock(Mutex& m);
-//         ~TryLock();
-//
-//     private:
-//         Mutex& m;
-//
-//     public:
-//         class TimeoutException : public exception
-//         {
-//             public:
-//                 TimeoutException(const std::string& msg) : msg(msg){}
-//                 virtual const char* what() const noexcept {return msg.c_str();}
-//             public:
-//                 const std::string msg;
-//         };
-//
-// };
+class Mutex::TryLock : public Mutex::Lock
+{
+	public:
+		TryLock(Mutex& m);
+		~TryLock();
+
+	public:
+		class TimeoutException : public exception
+		{
+			public:
+				TimeoutException(const std::string& msg) : msg(msg){}
+				virtual const char* what() const noexcept {return msg.c_str();}
+			public:
+				const std::string msg;
+		};
+
+};
 
 
 #endif

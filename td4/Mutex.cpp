@@ -59,17 +59,17 @@ void Mutex::unlock()
 
 
 /*****************************************/
-/*               Lock               */
+/*               Lock                    */
 /*****************************************/
 
 
-Mutex::Lock::Lock(Mutex& m) : m(m)
+Mutex::Lock::Lock(Mutex& mutex) : m(mutex)
 {
 	m.lock();
 }
 
 
-Mutex::Lock::Lock(Mutex& m, double timeout_ms) : m(m)
+Mutex::Lock::Lock(Mutex& mutex, double timeout_ms) : m(mutex)
 {
 	if(!(m.lock(timeout_ms)))
 	{
@@ -122,10 +122,10 @@ void Mutex::Lock::notifyAll()
 
 
 
-// Mutex::TryLock::TryLock(Mutex& m) : m(m)
-// {
-// 	if(!(m.trylock()))
-// 	{
-// 		throw TimeoutException("Mutex couldnt been locked");
-// 	}
-// }
+Mutex::TryLock::TryLock(Mutex& mutex) : Mutex::Lock(mutex)
+{
+	if(!(mutex.trylock()))
+	{
+		throw TimeoutException("Mutex couldnt been locked");
+	}
+}

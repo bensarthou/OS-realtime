@@ -27,11 +27,11 @@ void Semaphore::take()
 {
 	Mutex::Lock lock(mutex);
 
-	if (counter < 0)
+	while (counter <= 0)
 	{
-		counter--;
 		lock.wait();
 	}
+	counter--;
 }
 
 
@@ -39,14 +39,14 @@ bool Semaphore::take(double timeout_ms)
 {
 	Mutex::Lock lock(mutex);
 
-	if (counter < 0)
+	//TODO: measure real time before having a token given
+	while (counter <= 0)
 	{
-		counter--;
 		if(!lock.wait(timeout_ms))
 		{
 			return(false);
 		}
-
 	}
-	return(true);
+	counter--;
+	return true;
 }
