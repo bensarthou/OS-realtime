@@ -1,15 +1,17 @@
 #include "Semaphore.h"
-#include <climits>
 #include "Mutex.h"
 
 
-Semaphore::Semaphore(unsigned int initCount = 0, unsigned int maxCount = UINT_MAX)
+Semaphore::Semaphore(unsigned int initCount = 0, unsigned int maxCount)
 {
 	counter = initCount;
 	maxCount = maxCount;
 	mutex = Mutex(); // set condition ?
 
 }
+
+
+Semaphore::~Semaphore(){}
 
 
 void Semaphore::give()

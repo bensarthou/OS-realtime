@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "ThreadIncr.h"
 
@@ -19,41 +20,44 @@ int main(int argc, char* argv[])
 	Incr incr(&counter);
 
 	// Create tab of ThreadIncr
-	std::vector<ThreadIncr> tabThreads;
+	std::vector<std::unique_ptr<ThreadIncr>> tabThreads;
 
 	std::cout << "Calling " << nTasks << " threads once at a time, incrementing counter for " << nLoops << " each" << std::endl;
 
-	for(int i=0; i<nTasks; i++)
+	for(auto& thread : tabThreads)
 	{
-		tabThreads.push_back(ThreadIncr(&incr, nLoops));
-		tabThreads[i].start();
-		tabThreads[i].join();
+        thread.reset(new ThreadIncr(&incr, nLoops));
+		thread->start();
+		thread->join();
 		std::cout << ">>>> Get counter from looper: " << *(incr.getSample()) << std::endl;
 	}
+
+
+
 
 	std::cout << std::endl;
 	counter = 0;
 	Incr incr_2(&counter);
 
 	// Create tab of ThreadIncr
-	std::vector<ThreadIncr> tabThreads_2;
+	std::vector<std::unique_ptr<ThreadIncr>> tabThreads_2;
 
 	std::cout << "Calling " << nTasks << " threads at once (no mutex), incrementing counter for " << nLoops << " each" << std::endl;
 
-	for(int i=0; i<nTasks; i++)
+	for(auto& thread : tabThreads_2)
 	{
-		tabThreads_2.push_back(ThreadIncr(&incr_2, nLoops));
+        thread.reset(new ThreadIncr(&incr, nLoops));
 	}
 
 	std::cout << "Starting the threads" << std::endl;
 
 	for(int i=0; i<nTasks; i++)
 	{
-		tabThreads_2[i].start();
+		tabThreads_2[i]->start();
 		if(i%2==0)
 		{
 			std::cout << ">>>> Making calling thread sleeps for 1000. ms" << std::endl;
-			tabThreads_2[i].sleep_ms(1000.);
+			tabThreads_2[i]->sleep_ms(1000.);
 		}
 	}
 
@@ -63,8 +67,8 @@ int main(int argc, char* argv[])
 
 	for(int i=0; i<nTasks; i++)
 	{
-		tabThreads_2[i].join();
-		std::cout << i << " is: " << tabThreads_2[i].execTime_ms() << std::endl;
+		tabThreads_2[i]->join();
+		std::cout << i << " is: " << tabThreads_2[i]->execTime_ms() << std::endl;
 	}
 
 	std::cout << "Get counter from looper: " << *(incr_2.getSample()) <<", should be "<< nLoops*nTasks << std::endl;

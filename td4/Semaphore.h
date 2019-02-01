@@ -2,10 +2,11 @@
 #define SEMAPHORE_H
 
 #include "Mutex.h"
+#include <climits>
 
 class Semaphore {
 	public:
-		Semaphore(unsigned int initCount, unsigned int maxCount);
+		Semaphore(unsigned int initCount, unsigned int maxCount = UINT_MAX);
 		~Semaphore();
 		void give();
 		void flush();

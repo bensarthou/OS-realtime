@@ -7,12 +7,13 @@
 class ThreadProducer : public Thread
 {
 	protected:
-		int tokens_given;
 		Semaphore& sem;
+		int tokens_given;
+		int token_loop;
 		void run();
 
 	public:
-		ThreadProducer(Semaphore& sem);
+		ThreadProducer(Semaphore& sem, int token_loop);
 		int getTokens();
 };
 
