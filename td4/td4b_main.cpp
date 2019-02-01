@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	for(int i=0; i<nTasks; i++)
 	{
 		tabThreads[i]->start();
-		if(i%2==0)
+		if(i==0)
 		{
 			std::cout << ">>>> Making calling thread sleeps for 1000. ms" << std::endl;
 			tabThreads[i]->sleep_ms(1000.);

@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	Incr incr(&counter);
 
 	// Create tab of ThreadIncr
-	std::vector<std::unique_ptr<ThreadIncr>> tabThreads;
+	std::vector<std::unique_ptr<ThreadIncr>> tabThreads(nTasks);
 
 	std::cout << "Calling " << nTasks << " threads once at a time, incrementing counter for " << nLoops << " each" << std::endl;
 
@@ -40,13 +40,13 @@ int main(int argc, char* argv[])
 	Incr incr_2(&counter);
 
 	// Create tab of ThreadIncr
-	std::vector<std::unique_ptr<ThreadIncr>> tabThreads_2;
+	std::vector<std::unique_ptr<ThreadIncr>> tabThreads_2(nTasks);
 
 	std::cout << "Calling " << nTasks << " threads at once (no mutex), incrementing counter for " << nLoops << " each" << std::endl;
 
 	for(auto& thread : tabThreads_2)
 	{
-        thread.reset(new ThreadIncr(&incr, nLoops));
+        thread.reset(new ThreadIncr(&incr_2, nLoops));
 	}
 
 	std::cout << "Starting the threads" << std::endl;
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	for(int i=0; i<nTasks; i++)
 	{
 		tabThreads_2[i]->start();
-		if(i%2==0)
+		if(i==0)
 		{
 			std::cout << ">>>> Making calling thread sleeps for 1000. ms" << std::endl;
 			tabThreads_2[i]->sleep_ms(1000.);
