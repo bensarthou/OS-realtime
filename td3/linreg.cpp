@@ -16,17 +16,6 @@ void linear_regression(std::vector<double> const &x, std::vector<double> const &
 		throw std::runtime_error{"Vectors don't have the same size"};
 	}
 
-	// DEBUG:
-	// for (std::vector<double>::const_iterator i = x.begin(); i != x.end(); ++i)
-	// {
-	//     std::cout << *i << ' ';
-	// }
-	//
-	// for (std::vector<double>::const_iterator i = y.begin(); i != y.end(); ++i)
-	// {
-	//     std::cout << *i << ' ';
-	// }
-
 
 	const double n = x.size();
 	const double sum_x = std::accumulate(x.begin(), x.end(), 0.0);

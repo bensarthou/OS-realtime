@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <cstdlib>
 #include <vector>
+#include <numeric>
 #include <iostream>
 #include <memory>
 
@@ -15,19 +16,23 @@ int main(int argc, char* argv[])
 	(void)argc;
 
 	cout << "Please input 4 values: nb of consumer tasks, timeout in ms for a consumer task,"
-		 << " nb of producer tasks, nb of tokens given per producer task, "
-		 << "nb of max tokens for semaphore" << endl;
+		 << " nb of producer tasks, nb of tokens given per producer task, " << endl;
 
 	int nCons = atoi(argv[1]);
 	double consTimeOut = atof(argv[2]);
 	int nProd = atoi(argv[3]);
 	int nLoop = atoi(argv[4]);
 
-	Semaphore sem(0);
+	bool debug = true;
 
 	// Create a vector of producer threads and consumer threads
 	std::vector<std::unique_ptr<ThreadProducer>> tabThProd(nProd);
 	std::vector<std::unique_ptr<ThreadConsumer>> tabThCons(nCons);
+
+	std::vector<int> ProdTokens;
+	std::vector<int> ConsTokens;
+
+	Semaphore sem;
 
 	cout << endl << ">>>> Vector initialisation" << endl;
 	cout << "Initialising vector of " << nProd << " producer tasks, creating " << nLoop
@@ -44,9 +49,10 @@ int main(int argc, char* argv[])
 
 	for(auto& thCons : tabThCons)
 	 {
-		thCons.reset(new ThreadConsumer(sem, nLoop));
+		thCons.reset(new ThreadConsumer(sem, consTimeOut));
 		thCons->start();
 	 }
+
 
 	cout << endl << ">>>> Joining all the threads" << endl;
 	cout << "Producer thread i has produced:"<< endl;
@@ -54,17 +60,28 @@ int main(int argc, char* argv[])
 	for(auto& thProd : tabThProd)
 	{
 		thProd->join();
-		cout << " >> " << thProd->getTokens() << endl;
+		ProdTokens.push_back(thProd->getTokens());
+		if(debug)
+		{
+			cout << " >> " << thProd->getTokens() << endl;
+		}
 	}
 
 	cout << "Consumer thread i has tried to consume: " << endl;
 	for(auto& thCons : tabThCons)
 	{
-        cout << "trying to join" <<endl;
 		thCons->join();
-		cout << " >> " << thCons->getApproved() << " consumed, "
+		ConsTokens.push_back(thCons->getApproved());
+
+		if(debug)
+		{
+			cout << " >> " << thCons->getApproved() << " consumed, "
 						   << thCons->getDenied() << " denied." << endl;
+		}
 	}
 
-
+	cout << ">>>> Producers have produced " <<
+            std::accumulate(ProdTokens.begin(), ProdTokens.end(), 0.0) << endl;
+	cout << ">>>> Consumers have consumed " <<
+            std::accumulate(ConsTokens.begin(), ConsTokens.end(), 0.0) << endl;
 }
