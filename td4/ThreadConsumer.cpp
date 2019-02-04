@@ -4,7 +4,8 @@ ThreadConsumer::ThreadConsumer(Semaphore& sem, double timeout_ms): sem(sem), tim
 																	approved(0), denied(0){}
 
 
-void ThreadConsumer::run(){
+void ThreadConsumer::run()
+{
 	while (sem.take(timeout_ms))
 	{
 		approved++;

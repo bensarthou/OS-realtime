@@ -2,7 +2,6 @@
 #include <pthread.h>
 #include "timespec_op.h"
 
-
 /* Constructor */
 Mutex::Mutex()
 {
@@ -10,6 +9,8 @@ Mutex::Mutex()
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&posixId, &attr);
+
+	pthread_cond_init(&posixCondId, nullptr);
 }
 
 

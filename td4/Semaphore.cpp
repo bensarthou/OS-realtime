@@ -1,13 +1,11 @@
 #include "Semaphore.h"
 #include "Mutex.h"
+#include <iostream>
 
-
-Semaphore::Semaphore(unsigned int initCount = 0, unsigned int maxCount)
+Semaphore::Semaphore(unsigned int initCount, unsigned int maxCount_)
 {
 	counter = initCount;
-	maxCount = maxCount;
-	mutex = Mutex(); // set condition ?
-
+	maxCount = maxCount_;
 }
 
 
@@ -17,6 +15,7 @@ Semaphore::~Semaphore(){}
 void Semaphore::give()
 {
 	Mutex::Lock lock(mutex);
+
 	if(counter+1 <= maxCount)
 	{
 		counter++;
@@ -51,4 +50,10 @@ bool Semaphore::take(double timeout_ms)
 	}
 	counter--;
 	return true;
+}
+
+
+unsigned int Semaphore::getCounter()
+{
+	return counter;
 }

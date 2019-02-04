@@ -6,12 +6,12 @@
 
 class Semaphore {
 	public:
-		Semaphore(unsigned int initCount, unsigned int maxCount = UINT_MAX);
+		Semaphore(unsigned int initCount = 0, unsigned int maxCount = UINT_MAX);
 		~Semaphore();
 		void give();
-		void flush();
 		void take();
 		bool take(double timeout_ms);
+		unsigned int getCounter();
 
 	protected:
 		unsigned int counter;
