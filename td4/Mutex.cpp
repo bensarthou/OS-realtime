@@ -5,7 +5,6 @@
 /* Constructor */
 Mutex::Mutex()
 {
-	// TODO: may be missing condition (or the way to set it)
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&posixId, &attr);
