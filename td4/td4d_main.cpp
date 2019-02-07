@@ -55,17 +55,30 @@ int main(int argc, char* argv[])
 		thProd->join();
 	}
 
-    vector<vector <int> > tabResults(range);
-	cout << "Consumer thread i has consumed: " << endl;
+    vector<int> tabResults(range);
 	for(auto& thCons : tabThCons)
 	{
 		thCons->join();
 		vector<int> rec = thCons->getReceived();
 		for (std::vector<int>::const_iterator i = rec.begin(); i != rec.end(); ++i)
 			{
-				cout << *i << ' ';
+                tabResults[*i]++;
 			}
-        cout << endl;
 	}
 
+    cout << " Id of token produced:                 ";
+    for(int i = 0; i<range; i++)
+    {
+        cout << i << ' ';
+    }
+    cout << endl;
+    cout << " Nb of tokens received by all threads: ";
+
+    for(int i = 0; i<range; i++)
+    {
+        cout << tabResults[i] << ' ';
+    }
+    cout << endl;
+
+    cout << " Number of tokens received should all be equal to the number of producer threads ("<< nProd <<")" << endl;
 }
