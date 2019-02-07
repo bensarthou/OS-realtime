@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 		thProd->join();
 	}
 
+    vector<vector <int> > tabResults(range);
 	cout << "Consumer thread i has consumed: " << endl;
 	for(auto& thCons : tabThCons)
 	{
@@ -64,6 +65,7 @@ int main(int argc, char* argv[])
 			{
 				cout << *i << ' ';
 			}
+        cout << endl;
 	}
 
 }

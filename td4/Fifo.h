@@ -5,7 +5,7 @@
 #include <queue>
 #include "Mutex.h"
 
-// template <typename T, class Q = std::queue<T>>
+
 template <class T>
 class Fifo
 {
@@ -19,8 +19,6 @@ class Fifo
 		};
 
 	public:
-		// Fifo();
-		// ~Fifo();
 
 		void push(T& element);
 

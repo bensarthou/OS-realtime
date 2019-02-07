@@ -1,5 +1,7 @@
 #include "ThreadFifo.h"
+#include <iostream>
 
+using namespace std;
 
 ThreadFifoProd::ThreadFifoProd(Fifo<int>& fifo_, int range_): fifo(fifo_), range(range_){}
 
