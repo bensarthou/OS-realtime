@@ -6,14 +6,12 @@
 #include <memory>
 
 #include "ThreadFifo.h"
-#include "Fifo.h"
+#include "Fifo.hpp"
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
-	(void)argc;
-
 	cout << "Please input 4 values: nb of consumer tasks, timeout in ms for a consumer task,"
 		 << " nb of producer tasks, nb of tokens given per producer task, " << endl;
 
@@ -55,30 +53,25 @@ int main(int argc, char* argv[])
 		thProd->join();
 	}
 
-    vector<int> tabResults(range);
+	vector<int> tabResults(range);
 	for(auto& thCons : tabThCons)
 	{
 		thCons->join();
 		vector<int> rec = thCons->getReceived();
 		for (std::vector<int>::const_iterator i = rec.begin(); i != rec.end(); ++i)
 			{
-                tabResults[*i]++;
+				tabResults[*i]++;
 			}
 	}
 
-    cout << " Id of token produced:                 ";
-    for(int i = 0; i<range; i++)
-    {
-        cout << i << ' ';
-    }
-    cout << endl;
-    cout << " Nb of tokens received by all threads: ";
+    cout << "First column is the id of token produced, second is the number of the corresponding token received by all threads";
 
-    for(int i = 0; i<range; i++)
-    {
-        cout << tabResults[i] << ' ';
-    }
-    cout << endl;
+	cout << " Id | Received ";
+	for(int i = 0; i<range; i++)
+	{
+			cout << "  " << i << " | " << tabResults[i] << endl;
+	}
+	cout << endl;
 
-    cout << " Number of tokens received should all be equal to the number of producer threads ("<< nProd <<")" << endl;
+	cout << " Number of tokens received should all be equal to the number of producer threads ("<< nProd <<")" << endl;
 }

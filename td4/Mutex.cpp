@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include "timespec_op.h"
 
-/* Constructor */
+
 Mutex::Mutex()
 {
 	pthread_mutexattr_t attr;
@@ -13,14 +13,12 @@ Mutex::Mutex()
 }
 
 
-/* Destructor */
 Mutex::~Mutex()
 {
 	pthread_mutex_destroy(&posixId);
 }
 
 
-/* lock the mutex */
 void Mutex::lock()
 {
 	pthread_mutex_lock(&posixId);

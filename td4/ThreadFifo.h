@@ -2,7 +2,7 @@
 #define THREADFIFO_H
 
 #include "Thread.h"
-#include "Fifo.h"
+#include "Fifo.hpp"
 #include <vector>
 
 class ThreadFifoProd : public Thread

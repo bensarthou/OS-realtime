@@ -1,7 +1,40 @@
-#include "Fifo.h"
+#ifndef FIFO_HPP
+#define FIFO_HPP
 
+#include <exception>
+#include <queue>
+#include "Mutex.h"
 #include <iostream>
+
 using namespace std;
+
+
+template <class T>
+class Fifo
+{
+	public:
+		class EmptyException : public exception
+		{
+			virtual const char* what() const throw()
+			{
+				return("Empty exception !");
+			}
+		};
+
+	public:
+
+		void push(T& element);
+
+		T pop();
+
+		T pop(double timeout_ms);
+
+	protected:
+		std::queue<T> elements;
+
+	private:
+		Mutex mutex;
+};
 
 
 template <class T>
@@ -50,3 +83,6 @@ T Fifo<T>::pop(double timeout_ms)
 }
 
 template class Fifo<int>;
+
+
+#endif

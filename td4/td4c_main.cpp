@@ -11,9 +11,8 @@
 
 using namespace std;
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
-	(void)argc;
 
 	cout << "Please input 4 values: nb of consumer tasks, timeout in ms for a consumer task,"
 		 << " nb of producer tasks, nb of tokens given per producer task, " << endl;

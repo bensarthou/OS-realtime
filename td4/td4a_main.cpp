@@ -7,9 +7,8 @@
 #include "ThreadIncr.h"
 
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
-	(void)argc;
 	std::cout << "Please input number of loops for the incrementer, and the number of threads you want to call: "<< std::endl;
 
 	double nLoops = atof(argv[1]);
