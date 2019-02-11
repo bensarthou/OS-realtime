@@ -3,6 +3,8 @@
 #include "PosixThread.h"
 #include "timespec_op.h"
 
+
+
 PosixThread::PosixThread()
 {
 	pthread_attr_init(&posixAttr);

@@ -21,7 +21,7 @@ class Mutex
 
 	public:
 
-		//! Constructor
+		//! Constructor by default
 		/*!
 		\brief Set a mutex with its attribute (SCHED_RR by default) and initialize the mutex and the condition
 		*/
