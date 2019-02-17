@@ -6,46 +6,63 @@
 
 #include <vector>
 
+/*!
+* Calibrator class: Use a periodic timer to calibrate a loop: compute the parameters making the
+* relation between number of loop and exec time
+*/
+
+
 class Calibrator : public PeriodicTimer
 {
 	private:
 		// l(t) = a*t+b
-		double a;
-		double b;
+		double a; /*!< slope factor of the relationship between time and number of loop */
+		double b; /*!< intercept factor of the relationship  between time and number of loop*/
 
-		// regression factor
-		double r;
-		// vector storing times at wich values are sampled
-		std::vector<double> times;
 
-		// Vector storing all sampled values
-		std::vector<double> samples;
+		double r; /*!< regression factor*/
 
-		Looper looper;
-		unsigned int remainingSamples;
+		std::vector<double> times; /*!< vector storing times at wich values are sampled*/
+
+		std::vector<double> samples; /*!< Vector storing all sampled values*/
+
+		Looper looper; /*!< Looper object to be calibrated */
+		unsigned int remainingSamples; /*!< remaining number of loops to be done */
 
 	protected:
 
-		/* measures parameters a and b of Looper::runLoop during time t:
+		/*!
+		\brief Measures parameters a and b of Looper::runLoop during time t:
 		called function is getSample if there are still samples to do,
-		Looper::stopLoop() if not. */
-
+		Looper::stopLoop() if not.
+		*/
 		void callback();
 
 	public:
 
-		/* Constructor:
-		Runs a periodic timer with samplingPeriod_ms / nSamples period, and
-		compute a and b values from it. */
+		//! Constructor:
+		/*!
+		\brief Runs a periodic timer with samplingPeriod_ms / nSamples period, and
+		compute a and b values from it.
+		\param samplingPeriod_ms: double, period for the timer
+		\param nSamples: int, number of samples to do in the loop
+		*/
 		Calibrator(double samplingPeriod_ms, unsigned int nSamples);
 
-		/* Destructor */
+		//! Destructor
 		~Calibrator();
 
-		/* Convert a duration in milliseconds onto a number of loops with l(t) = a*t+b */
+		/*!
+		\brief Convert a duration in milliseconds onto a number of loops with l(t) = a*t+b
+		\param duration_ms: time duration in milliseconds
+		\return number of loops to do, to reach the exec duration
+		*/
 		double nLoops(double duration_ms);
 
-		/* Gets last value of loop */
+		/*!
+		\brief Getter for last value of loop
+		\return last value stored in samples
+		*/
 		double getLastValue();
 };
 #endif

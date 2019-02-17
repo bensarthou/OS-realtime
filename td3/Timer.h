@@ -5,31 +5,51 @@
 #include <signal.h>
 #include "timespec_op.h"
 
+/*!
+* Timer class: Object oriented encapsulation of POSIX timer 
+*/
+
+
 class Timer
 {
 	private:
-		/* call_callback definition */
+		/*!
+		\brief Wrapper for virtual callback
+		\param sig: signal id
+		\param si: pointer to Timer object
+		\param user: unused ?
+		*/
 		static void call_callback(int sig, siginfo_t* si, void* user);
 
 	public:
 
-		/* Constructor, initiate the POSIX timer */
+		/*!
+		\brief Constructor, initiate the POSIX timer and all its attributes
+		*/
 		Timer();
 
-		/* Destructor */
+		/*!
+		\brief Destructor, delete timer
+		*/
 		~Timer();
 
-		/*Start the timer for duration duration_ms */
-
+		/*!
+		\brief Start the timer with the specified duration
+		\param duration_ms: duration of the timer, in ms
+		*/
 		void start(double duration_ms);
 
-		/* Stop the timer */
+		/*!
+		\brief Stop the timer
+		*/
 		void stop();
 
 	protected:
-		timer_t tid; // POSIX timer
+		timer_t tid; /*!< ID to POSIX timer*/
 
-		/* Virtual callback definition, to be implemented in a derivate class */
+		/*!
+		\brief Virtual callback definition
+		*/
 		virtual void callback()=0;
 };
 #endif

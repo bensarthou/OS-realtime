@@ -26,14 +26,5 @@ void linear_regression(std::vector<double> const &x, std::vector<double> const &
 	m = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
 	p = (sum_y - m * sum_x) / n;
 
-	// double SSres = 0;
-	// double SStot = 0;
-	// for(size_t i = 0; i < n; i++)
-	// {
-	//     SSres += pow(y[i] - m*x[i] - p, 2);
-	//     SStot += pow(y[i] - sum_x/n, 2);
-	// }
-
-	// False equation
 	r = (n * sum_xy - sum_x * sum_y) / sqrt( (n * sum_xx - sum_x*sum_x) * (n* sum_yy - sum_y*sum_y));
 }

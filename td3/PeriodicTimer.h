@@ -3,6 +3,10 @@
 
 #include <time.h>
 
+/*!
+* PeriodicTimer class: object oriented POSIX timer, with periodic definition
+*/
+
 class PeriodicTimer : public Timer
 {
 	public:

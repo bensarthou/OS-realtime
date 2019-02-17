@@ -3,23 +3,34 @@
 
 #include "Calibrator.h"
 
+/*!
+* Looper class: Run a loop that increments a value
+*/
+
+
 class CpuLoop : public Looper
 {
 	private:
 
-		/* Calibrator, already calibrate the loop with a and b*/
-		Calibrator& calibrator_;
+		Calibrator& calibrator_; /*!< Loop calibrator object, already calibrated*/
 
 	public:
 
-		/* Constructor */
+		/*!
+		\brief Constructor, takes an already calibrated calibrator object as attribute
+		*/
 		CpuLoop(Calibrator& calibrator);
 
 
-		/* Destructor */
+		/*!
+		\brief Destructor
+		*/
 		~CpuLoop();
 
-		/* run a loop for a duration_ms time, with the help of the calibrator coefficients*/
+		/*!
+		\brief Run a loop for a duration_ms time, with the help of the calibrator coefficients
+		\param duration_ms: duration the loop should run, in milliseconds
+		*/
 		void runTime(double duration_ms);
 };
 

@@ -80,7 +80,7 @@ int main(int, char* argv[])
 	}
 
 	cout << ">>>> Producers have produced " <<
-            std::accumulate(ProdTokens.begin(), ProdTokens.end(), 0.0) << endl;
+			std::accumulate(ProdTokens.begin(), ProdTokens.end(), 0.0) << endl;
 	cout << ">>>> Consumers have consumed " <<
-            std::accumulate(ConsTokens.begin(), ConsTokens.end(), 0.0) << endl;
+			std::accumulate(ConsTokens.begin(), ConsTokens.end(), 0.0) << endl;
 }

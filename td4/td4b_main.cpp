@@ -52,8 +52,3 @@ int main(int, char* argv[])
 
 	std::cout << "Get counter from looper: " << *(incr.getSample()) <<", should be "<< nLoops*nTasks << std::endl;
 }
-
-// FIFO ?!
-// tester timeout de Lock/tryLock =>
-// wait(timeout) => timeout total ou non => oui, recuperer le temps depuis la fonction posix
-// push_back: changer la méthode pour éviter les copies d'object (utiliser un setter)
