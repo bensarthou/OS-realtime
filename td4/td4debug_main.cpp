@@ -14,7 +14,7 @@ pthread_t get_INVALID_PTHREAD()
 	if (INVALID_PTHREAD == 0)
 	{
 		pthread_create(&INVALID_PTHREAD, nullptr, dummyFunction, nullptr);
-		pthread_join(INVALID_PTHREAD, nullptr);
+		pthread_yield(INVALID_PTHREAD, nullptr);
 	}
 	return INVALID_PTHREAD;
 }

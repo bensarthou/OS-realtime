@@ -49,11 +49,12 @@ int main()
 
 	timer_settime(tid, 0, &its, NULL); // démarrage du timer
 
+
 	while(counter < 15)
 	{
 		usleep(5);
 	}
 
-	timer_delete(tid); //desctruction du timer
+	timer_delete(tid); //destruction du timer
 
 }

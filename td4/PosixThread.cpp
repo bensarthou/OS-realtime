@@ -8,6 +8,7 @@
 PosixThread::PosixThread()
 {
 	pthread_attr_init(&posixAttr);
+	posixId = get_INVALID_PTHREAD();
 }
 
 
@@ -111,4 +112,23 @@ bool PosixThread::getScheduling(int* p_schedPolicy, int* p_priority)
 	}
 
 	return thread_started;
+}
+
+
+/* Dummy functions for avoiding invalid thread id */
+
+static void* dummyFunction(void*)
+{
+	return nullptr;
+}
+
+pthread_t get_INVALID_PTHREAD()
+{
+	static pthread_t INVALID_PTHREAD = 0;
+	if (INVALID_PTHREAD == 0)
+	{
+		pthread_create(&INVALID_PTHREAD, nullptr, dummyFunction, nullptr);
+		pthread_yield();
+	}
+	return INVALID_PTHREAD;
 }

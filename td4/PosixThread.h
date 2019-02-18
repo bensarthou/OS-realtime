@@ -105,4 +105,7 @@ class PosixThread::Exception : public std::exception
 
 };
 
+//! dummy function, returns a thread id valid
+pthread_t get_INVALID_PTHREAD();
+
 #endif

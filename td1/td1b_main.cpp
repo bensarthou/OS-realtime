@@ -44,7 +44,7 @@ void incr(unsigned int nLoops, double* pCounter)
 
 int main(int argc, char* argv[])
 {
-
+    cout << "Please input number of loops to increment the counter: " <<end;
 	unsigned int nLoops = atoi(argv[1]);
 	double counter = 0.0;
 

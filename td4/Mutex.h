@@ -153,7 +153,7 @@ class Mutex::TryLock : public Mutex::Lock
 		/*!
 		\brief Try to lock the mutex attribute raise a timeout exception if it failed
 		*/
-		TryLock(Mutexy & m);
+		TryLock(Mutex& m);
 
 	public:
 		/*!
