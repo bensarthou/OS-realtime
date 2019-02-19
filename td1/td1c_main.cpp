@@ -11,15 +11,28 @@
 
 using namespace std;
 
+
+/*!Struct linear
+\brief: containing 2 double, defining the relationship between exec time and number of loops
+*/
 struct Linear
 {
 	double a;
 	double b;
 };
 
+
+/*!
+\brief incrementer function, with early stopping
+\param nLoops: number of incrementations to be done
+\param pCounter: pointer to counter to be incremented
+\param pStop: pointer to bool, can early stop the incrementation
+
+\return actual number of incrementations done.
+*/
 unsigned int incr(unsigned int nLoops, double* pCounter, volatile bool* pStop)
 {
-	int iLoops = 0;
+	unsigned int iLoops = 0;
 	for(iLoops = 0; iLoops<nLoops; iLoops++)
 	{
 		if(*pStop)
@@ -32,7 +45,10 @@ unsigned int incr(unsigned int nLoops, double* pCounter, volatile bool* pStop)
 }
 
 
-void stopCallback(int sig, siginfo_t* si, void*)
+/*!
+\brief This timer callback function will change the value of the bool Stop, during timer execution
+*/
+void stopCallback(int, siginfo_t* si, void*)
 {
 	volatile int* ptrStop;
 	ptrStop = (volatile int*) si->si_value.sival_ptr;
@@ -40,6 +56,13 @@ void stopCallback(int sig, siginfo_t* si, void*)
 	*ptrStop = true;
 }
 
+
+/*!
+\brief: Function to calibrate a loop: Run an incrementation, early stop it at 4 or 6 seconds with
+a timer, and measure the (linear) relationship between execution time and number of incrementations done
+
+\return: param of the linear relation, as a Linear struct
+*/
 Linear calib()
 {
 	Linear res;
@@ -48,54 +71,65 @@ Linear calib()
 	double counter1 = 0;
 	double counter2 = 0;
 
-	volatile bool stop = false;
-	unsigned int max_loops_done_4 = 0;
-	unsigned int max_loops_done_6 = 0;
+	volatile bool stop = false; // early stopping
+	unsigned int max_loops_done_4 = 0; // Number of loops done during 4 seconds
+	unsigned int max_loops_done_6 = 0; // Number of loops done during 6 seconds
 
-	// Action à effectuer quand le timer finit
+	/************************/
+	/* DEFINITION OF TIMERS */
+	/************************/
+
 	struct sigaction sa;
-	sa.sa_flags = SA_SIGINFO; // Type de l'appel: fonction avec paramètres
-	sa.sa_sigaction = stopCallback; // la fonction à appeler
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = stopCallback; // callback: modify Stop value
 
-	sigemptyset(&sa.sa_mask); // aucun flag de bloquage
-	sigaction(SIGRTMIN, &sa, NULL); // Borne du signal temporel ?
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGRTMIN, &sa, NULL);
 
-	struct sigevent sev; // evenement associé à l'expiration du timer ??
-	sev.sigev_notify = SIGEV_SIGNAL; // type de l'evenement: signal
-	sev.sigev_signo = SIGRTMIN; // Signal émis: doit être le même que celui de l'action
+	struct sigevent sev;
+	sev.sigev_notify = SIGEV_SIGNAL;
+	sev.sigev_signo = SIGRTMIN;
 	sev.sigev_value.sival_ptr = (void*) &stop; // value to be used in siginfo_t* in your handler
 
 	timer_t tid1;
 	timer_t tid2; // id du timer
-	timer_create(CLOCK_REALTIME, &sev, &tid1); //creation du timer, ne pas oublier le delete
-	timer_create(CLOCK_REALTIME, &sev, &tid2); //creation du timer, ne pas oublier le delete
+	timer_create(CLOCK_REALTIME, &sev, &tid1);
+	timer_create(CLOCK_REALTIME, &sev, &tid2);
 
-
-	itimerspec its4; // contient les durées d'expiration du timer
-	its4.it_value.tv_sec = 4; // durée de la première expiration, on peut y mettre 0 pour arrêter le timer
+	// 4 second timer, no repeat
+	itimerspec its4;
+	its4.it_value.tv_sec = 4;
 	its4.it_value.tv_nsec = 0;
-	its4.it_interval.tv_sec = 0;// expiration periodique
+	its4.it_interval.tv_sec = 0;
 	its4.it_interval.tv_nsec = 0;
 
-	itimerspec its6; // contient les durées d'expiration du timer
-	its6.it_value.tv_sec = 6; // durée de la première expiration, on peut y mettre 0 pour arrêter le timer
+	// 6 second timer, no repeat
+	itimerspec its6;
+	its6.it_value.tv_sec = 6;
 	its6.it_value.tv_nsec = 0;
-	its6.it_interval.tv_sec = 0;// expiration periodique
+	its6.it_interval.tv_sec = 0;
 	its6.it_interval.tv_nsec = 0;
 
-	timer_settime(tid1, 0, &its6, NULL); // démarrage du timer
+	/***********************************************/
+	/* RUNNING TWO TIMERS OF DIFFERENTS DURATIONS  */
+	/***********************************************/
+	timer_settime(tid1, 0, &its4, NULL); // 4 sec timer starts
 
 	max_loops_done_4 = incr(nLoops, &counter1, &stop);
 
-	timer_delete(tid1); //desctruction du timer
+	timer_delete(tid1);
 
-	stop = false;
+	stop = false; // re-init early stopping
 
-	timer_settime(tid2, 0, &its6, NULL); // démarrage du timer
+	timer_settime(tid2, 0, &its6, NULL); // 6 sec timer starts
 
 	max_loops_done_6 = incr(nLoops, &counter2, &stop);
 
-	timer_delete(tid1); //destruction du timer
+	timer_delete(tid1);
+
+	/***********************************************************************/
+	/* USING MEASURES AND LINEAR RELATION TO DEFINE CALIBRATION PARAMETERS */
+	/***********************************************************************/
 
 	res.a = (max_loops_done_6 - max_loops_done_4)/(6.0 - 4.0);
 	res.b = max_loops_done_6 - 6*res.a;
@@ -120,36 +154,83 @@ int main()
 	volatile bool stop = false;
 	unsigned int max_loops_done = 0;
 
-	// Action à effectuer quand le timer finit
+	/***********************/
+	/* DEFINITION OF TIMER */
+	/***********************/
+
 	struct sigaction sa;
-	sa.sa_flags = SA_SIGINFO; // Type de l'appel: fonction avec paramètres
-	sa.sa_sigaction = stopCallback; // la fonction à appeler
+	sa.sa_flags = SA_SIGINFO;
+	sa.sa_sigaction = stopCallback; // callback for the timers
 
-	sigemptyset(&sa.sa_mask); // aucun flag de bloquage
-	sigaction(SIGRTMIN, &sa, NULL); // Borne du signal temporel ?
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGRTMIN, &sa, NULL);
 
-	struct sigevent sev; // evenement associé à l'expiration du timer ??
-	sev.sigev_notify = SIGEV_SIGNAL; // type de l'evenement: signal
-	sev.sigev_signo = SIGRTMIN; // Signal émis: doit être le même que celui de l'action
-	sev.sigev_value.sival_ptr = (void*) &stop; // value to be used in siginfo_t* in your handler
+	struct sigevent sev;
+	sev.sigev_notify = SIGEV_SIGNAL;
+	sev.sigev_signo = SIGRTMIN;
+	sev.sigev_value.sival_ptr = (void*) &stop; // Stop value to be used by callback
 
-	timer_t tid; // id du timer
-	timer_create(CLOCK_REALTIME, &sev, &tid); //creation du timer, ne pas oublier le delete
-	itimerspec its; // contient les durées d'expiration du timer
-	its.it_value.tv_sec = 2; // durée de la première expiration, on peut y mettre 0 pour arrêter le timer
+	timer_t tid;
+	timer_create(CLOCK_REALTIME, &sev, &tid);
+
+	// Timer time definition (2 seconds expiration)
+	itimerspec its;
+	its.it_value.tv_sec = 2;
 	its.it_value.tv_nsec = 0;
-	its.it_interval.tv_sec = 0;// expiration periodique
+	its.it_interval.tv_sec = 0;
 	its.it_interval.tv_nsec = 0;
 
-	timer_settime(tid, 0, &its, NULL); // démarrage du timer
+	timer_settime(tid, 0, &its, NULL); // Launching timer
 
+	// Running the incrementer, when the timer will stop, so does the incrementation
 	max_loops_done = incr(nLoops, &counter, &stop);
 
-	timer_delete(tid); //desctruction du timer
+	timer_delete(tid);
 
-	printf("Nb of loops before 2-sec timer interruption: %d \n", max_loops_done);
+	printf("We have run an incrementation and stop it at 2 seconds. Nb of loops before 2-sec timer interruption: %d \n", max_loops_done);
 
-	calib();
+
+	/********************/
+	/* LOOP CALIBRATION */
+	/********************/
+    printf(">>>> CALIBRATION:\n");
+	Linear res_calib = calib();
+    printf(">>>> TEST:\n");
+
+	/********************/
+	/* TEST CALIBRATION */
+	/********************/
+	printf("We want to run enough loops for the incrementation to run 5 seconds\n");
+	unsigned int nLoops_calib = res_calib.a*5000.+res_calib.b;
+	printf("Calibration says number of loop should be: %d\n", nLoops_calib);
+
+	struct timespec start, end, duration;
+
+	clock_gettime(CLOCK_REALTIME, &start);
+
+	// We measure the exec time of the incrementation
+    stop = false;
+    counter = 0;
+	max_loops_done = incr(nLoops_calib, &counter, &stop);
+
+	clock_gettime(CLOCK_REALTIME, &end);
+	std::cout << "Final value of counter:" << counter << std::endl;
+
+	// Computing difference between start and stop timespec
+	duration.tv_sec = end.tv_sec - start.tv_sec;
+
+	// In case of nanoseconds overflow
+	if (end.tv_nsec < start.tv_nsec)
+	{
+		duration.tv_sec -= 1;
+		end.tv_nsec += 1000000000;
+	}
+
+	duration.tv_nsec = end.tv_nsec - start.tv_nsec;
+
+	printf("Measured duration is %ld seconds and %ld nanoseconds, equivalent to %f millisconds\n",
+	duration.tv_sec, duration.tv_nsec, duration.tv_sec*1000. + duration.tv_nsec/1000000.);
+
 
 	/*Amélioration:
 	- On peut faire plusieurs mesures des max_loops pour des temps différents, et moyenner les a, b obtenus pour obtenir une mesure plus fiable

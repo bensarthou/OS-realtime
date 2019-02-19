@@ -6,68 +6,50 @@
 #include <time.h>
 #include <unistd.h>
 
-/*
-On considère la fonction de signature : void incr(unsigned int nLoops, double* pCounter).
-Cette fonction doit effectuer une boucle incrémentant de 1.0 la valeur du compteur pointée par
-pCounter  elle doit effectuer cette boucle nLoops fois.
-
-	Écrivez le code de cette fonction.
-
-La signature standard du point d’entrée d’un programme est : int main(int argc, char* argv[]).
- Le paramètre argc indique le nombre de chaines de caractères de la ligne de commande ayant
- lancé l’exécution du programme ; le paramètre argv est le tableau de l’ensemble de ces chaines
- dans l’ordre où ils ont été tapés sur la ligne de commande, argv[0] étant le nom du programme,
- argv[1] son 1er paramètre, argv[2] son 2e paramètre, etc. Ici, la fonction main doit :
-
-– déclarer une variable nLoops et l’initialiser avec la valeur numérique décimale de argv[1]‎ ;
-– déclarer un compteur counter de type double et l’initialiser à 0.0 ;‎
-– appeler la fonction incr sur ces deux variables ;
-– imprimer à l’écran la valeur finale de counter. ‎
-
-	Écrivez, compilez et exécutez le programme ainsi défini. Notez la valeur finale du compteur
-	counter.
-
-Renseignez-vous sur la fonction Posix clock_gettime exposée dans le cours.
-
-	En utilisant clock_gettime, affichez à la fin du programme le temps d’exécution de la fonction
-	incr ; ‎affichez ce temps en secondes sous la forme d’un nombre à virgule.‎
+/*!
+\brief Increment nloops time a counter value
+\param nLoops: number of loop to be done
+\param pCounter: pointer to counter value, to be incremented
 */
-
 void incr(unsigned int nLoops, double* pCounter)
 {
-	for(int i = 0; i<nLoops; i++)
+	for(unsigned int i = 0; i<nLoops; i++)
 	{
 		*pCounter += 1.0;
 	}
 }
 
 
-int main(int argc, char* argv[])
+int main(int, char* argv[])
 {
-    cout << "Please input number of loops to increment the counter: " <<end;
+	std::cout << "Please input number of loops to increment the counter: " << std::endl;
 	unsigned int nLoops = atoi(argv[1]);
+
+	// initialize counter at 0.0
 	double counter = 0.0;
 
-	struct timespec debut, fin, duree;
+	struct timespec start, end, duration;
 
-	clock_gettime(CLOCK_REALTIME, &debut);
-	// On mesure l'execution de la fonction
+	clock_gettime(CLOCK_REALTIME, &start);
+
+	// We measure the exec time of the incrementation
 	incr(nLoops, &counter);
 
-	clock_gettime(CLOCK_REALTIME, &fin);
-	std::cout << "Valeur finale de pCounter:" << counter << std::endl;
+	clock_gettime(CLOCK_REALTIME, &end);
+	std::cout << "Final value of pCounter:" << counter << std::endl;
 
-	// Calcul de la différence de 2 instants
-	duree.tv_sec = fin.tv_sec - debut.tv_sec;
-	// Gestion du cas overflow des nanoseconds
-	if (fin.tv_nsec < debut.tv_nsec)
+	// Computing difference between start and stop timespec
+	duration.tv_sec = end.tv_sec - start.tv_sec;
+
+	// In case of nanoseconds overflow
+	if (end.tv_nsec < start.tv_nsec)
 	{
-		duree.tv_sec -= 1;
-		fin.tv_nsec += 1000000000;
+		duration.tv_sec -= 1;
+		end.tv_nsec += 1000000000;
 	}
 
-	duree.tv_nsec = fin.tv_nsec - debut.tv_nsec;
+	duration.tv_nsec = end.tv_nsec - start.tv_nsec;
 
-	printf("Measured duration is %d seconds and %d nanoseconds, equivalent to %f millisconds\n",
-	duree.tv_sec, duree.tv_nsec, duree.tv_sec*1000. + duree.tv_nsec/1000000.);
+	printf("Measured duration is %ld seconds and %ld nanoseconds, equivalent to %f millisconds\n",
+	duration.tv_sec, duration.tv_nsec, duration.tv_sec*1000. + duration.tv_nsec/1000000.);
 }
