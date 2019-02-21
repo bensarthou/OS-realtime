@@ -6,7 +6,12 @@
 
 using namespace std;
 
-void myIncrementer(int sig, siginfo_t* si, void*)
+
+/*!
+\brief incrementer as timer callback
+\param si: pointer to si_value, with the counter pointer
+*/
+void myIncrementer(int, siginfo_t* si, void*)
 {
 	volatile int* ptrCounter;
 	ptrCounter = (volatile int*) si->si_value.sival_ptr;

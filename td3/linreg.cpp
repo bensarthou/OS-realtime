@@ -12,7 +12,7 @@ void linear_regression(std::vector<double> const &x, std::vector<double> const &
 	// Equation: m*x+p
 	if (x.size() != y.size())
 	{
-		printf("%ld:%ld", x.size(), y.size());
+		printf("%d:%d", x.size(), y.size());
 		throw std::runtime_error{"Vectors don't have the same size"};
 	}
 

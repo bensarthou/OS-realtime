@@ -201,8 +201,9 @@ int main()
 	/* TEST CALIBRATION */
 	/********************/
 	printf("We want to run enough loops for the incrementation to run 5 seconds\n");
-	unsigned int nLoops_calib = res_calib.a*5000.+res_calib.b;
-	printf("Calibration says number of loop should be: %d\n", nLoops_calib);
+
+	unsigned int nLoops_calib = res_calib.a*5.+res_calib.b;
+	printf("Calibration says number of loop should be: %u\n", nLoops_calib);
 
 	struct timespec start, end, duration;
 
