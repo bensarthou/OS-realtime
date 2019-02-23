@@ -40,7 +40,6 @@ bool Semaphore::take(double timeout_ms)
 {
 	Mutex::Lock lock(mutex);
 
-	//TODO: measure real time before having a token given
 	while (counter <= 0)
 	{
 		if(!lock.wait(timeout_ms))

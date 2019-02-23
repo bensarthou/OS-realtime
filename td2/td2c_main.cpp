@@ -85,12 +85,12 @@ int main(int, char* argv[])
 	else if(schedPolicy_name=="RR")
 	{
 		schedPolicy = SCHED_RR;
-		schedPriority = sched_get_priority_max(SCHED_RR);
+		schedPriority = sched_get_priority_max(SCHED_RR)-1;
 	}
 	if(schedPolicy_name=="FIFO")
 	{
 		schedPolicy = SCHED_FIFO;
-		schedPriority = sched_get_priority_max(SCHED_FIFO);
+		schedPriority = sched_get_priority_max(SCHED_FIFO)-1;
 	}
 
 	double counter = 0.0;
