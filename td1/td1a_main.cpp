@@ -42,7 +42,7 @@ int main()
 	timer_create(CLOCK_REALTIME, &sev, &tid); // Creation the timer object
 
 	itimerspec its; // Define expiration time for the timer
-	its.it_value.tv_sec = 10; // First tick
+	its.it_value.tv_sec = 1; // First tick
 	its.it_value.tv_nsec = 0;
 	its.it_interval.tv_sec = 0; // timer period
 	its.it_interval.tv_nsec = 500000000;

@@ -25,7 +25,7 @@ int main(int, char* argv[])
 
 	for(auto& thread : tabThreads)
 	{
-        thread.reset(new ThreadIncr(&incr, nLoops));
+		thread.reset(new ThreadIncr(&incr, nLoops));
 		thread->start();
 		thread->join();
 		std::cout << ">>>> Get counter from looper: " << *(incr.getSample()) << std::endl;
@@ -45,7 +45,7 @@ int main(int, char* argv[])
 
 	for(auto& thread : tabThreads_2)
 	{
-        thread.reset(new ThreadIncr(&incr_2, nLoops));
+		thread.reset(new ThreadIncr(&incr_2, nLoops));
 	}
 
 	std::cout << "Starting the threads" << std::endl;
@@ -55,8 +55,8 @@ int main(int, char* argv[])
 		tabThreads_2[i]->start();
 		if(i==0)
 		{
-			std::cout << ">>>> Making calling thread sleeps for 1000. ms" << std::endl;
-			tabThreads_2[i]->sleep_ms(1000.);
+			std::cout << ">>>> Making calling thread sleeps for 3000. ms" << std::endl;
+			tabThreads_2[i]->sleep_ms(3000.);
 		}
 	}
 

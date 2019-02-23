@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <vector>
+//! @credit: Grégoire Roussel
 
 /*!
 \brief compute slope parameters with linear regression

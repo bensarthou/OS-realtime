@@ -29,6 +29,8 @@ int main()
 	time4.tv_sec = 5;
 	time4.tv_nsec = 0.0;
 
+	printf("------ TESTING CONVERSION AND OPERATIONS --------- \n");
+
 	printf("----- Ms to timespec\n");
 	print_timespec(timespec_from_ms(ms));
 	printf("\n");

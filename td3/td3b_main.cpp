@@ -6,13 +6,14 @@
 
 using namespace std;
 
-int main()
+int main(int, char* argv[])
 {
-	int counter = 10;
+	cout << "Please input starting value of counter:" << endl;
+	int counter = atoi(argv[1]);
 	Countdown countdown(&counter);
-	cout << "Starting countdown of " << counter << "iterations"<< endl;
+	cout << "Starting countdown of " << counter << " iterations"<< endl;
 
-	countdown.start(100.);
+	countdown.start(1000.);
 
 	while(counter>0){}
 

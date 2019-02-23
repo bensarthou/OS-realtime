@@ -36,14 +36,12 @@ void incr(unsigned int nLoops, double* pCounter, pthread_mutex_t mutex, int* pPr
 	{
 
 		// section critique
-		// cout << "bool" << *pProtected << endl;
 		if(*pProtected==0)
 		{
 			*pCounter += 1.0;
 		}
 		else
 		{
-			// cout << "mutex ";
 			pthread_mutex_lock(&mutex);
 			*pCounter += 1.0;
 			pthread_mutex_unlock(&mutex);
@@ -112,9 +110,9 @@ int main(int, char* argv[])
 	pthread_t* tabThreads = NULL;
 	tabThreads = new pthread_t[nTasks];
 
-    // definition of scheduling policy and order
+	// definition of scheduling policy and order
 	sched_param schedParams;
-	schedParams.sched_priority = schedPriority;  
+	schedParams.sched_priority = schedPriority;
 	pthread_setschedparam(pthread_self(), schedPolicy, &schedParams);
 
 	timespec start = timespec_now();

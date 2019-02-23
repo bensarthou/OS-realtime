@@ -40,7 +40,6 @@ timespec timespec_from_ms(double time_ms)
 	{
 		// do euclidian division on integer part of nsec to get number of seconds
 		nsec = ((long long int)floor(time_ns))%1000000000;
-		// nsec = nsec + (time_ns - floor(time_ns)); // add the floating part
 
 		sec = (time_t)((time_ns - nsec)/1000000000.);
 
@@ -50,7 +49,6 @@ timespec timespec_from_ms(double time_ms)
 		time_ns = - time_ns;
 		// do euclidian division on integer part of nsec to get number of seconds
 		temp_nsec = ((long long int)floor(time_ns))%1000000000;
-		// temp_nsec = temp_nsec + (time_ns - floor(time_ns)); // add the floating part
 		sec = (time_t)((temp_nsec-time_ns)/1000000000.);
 
 		// For negative values, decrement sec to add positive nsec

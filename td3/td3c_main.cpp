@@ -10,8 +10,8 @@ using namespace std;
 
 int main()
 {
-	double duration_ms = 1000.;
-	unsigned int n_samples=10;
+	double duration_ms = 100.;
+	unsigned int n_samples=1000;
 
 	cout << "Duration of one period is " << duration_ms << " ms, we run "<< n_samples << " samples." << endl;
 	cout << "Starting calibrator... " << endl;
@@ -21,7 +21,7 @@ int main()
 	cout << "Last value of loop is: " << calibrator.getLastValue() << endl;
 	cout << "Estimated last value from calibration: " << calibrator.nLoops(n_samples*duration_ms) << endl;
 
-	cout << "If the two are equal, then we have successfully calibrated our loop" << endl;
+	cout << "If the two are approximately equal, then we have successfully calibrated our loop" << endl;
 
 	cout << "--------------------------" << endl;
 

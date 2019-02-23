@@ -134,9 +134,10 @@ Linear calib()
 	res.a = (max_loops_done_6 - max_loops_done_4)/(6.0 - 4.0);
 	res.b = max_loops_done_6 - 6*res.a;
 
-	printf("We measured %d loops for a 4-sec timer, and %d for a 6-sec timer\n", max_loops_done_4,
-			max_loops_done_6);
-	printf("Linear law is %f*t+%f \n", res.a, res.b);
+	cout << "We measured " << max_loops_done_4 << " loops for a 4-seconds timer, and "
+		 << max_loops_done_6 << " for a 6-sec timer" << endl;
+
+	cout << "Linear law is " << res.b << " + t*" << res.a << endl;
 
 	return res;
 
@@ -144,7 +145,9 @@ Linear calib()
 
 
 
-
+/*********/
+/* MAIN */
+/********/
 
 int main()
 {
@@ -187,35 +190,35 @@ int main()
 
 	timer_delete(tid);
 
-	printf("We have run an incrementation and stop it at 2 seconds. Nb of loops before 2-sec timer interruption: %d \n", max_loops_done);
-
+	cout << "We have run an incrementation and stop it at 2 seconds. Nb of loops before 2-sec timer interruption: " << max_loops_done << endl;
 
 	/********************/
 	/* LOOP CALIBRATION */
 	/********************/
-    printf(">>>> CALIBRATION:\n");
+	cout << ">>>> CALIBRATION:" << endl;
 	Linear res_calib = calib();
-    printf(">>>> TEST:\n");
+	cout << ">>>> TEST: " << endl;
 
 	/********************/
 	/* TEST CALIBRATION */
 	/********************/
-	printf("We want to run enough loops for the incrementation to run 5 seconds\n");
+	cout << "We want to run enough loops for the incrementation to run 5 seconds" << endl;
 
 	unsigned int nLoops_calib = res_calib.a*5.+res_calib.b;
-	printf("Calibration says number of loop should be: %u\n", nLoops_calib);
+	cout << "Calibration says number of loop should be: " << nLoops_calib << endl;
+
 
 	struct timespec start, end, duration;
 
 	clock_gettime(CLOCK_REALTIME, &start);
 
 	// We measure the exec time of the incrementation
-    stop = false;
-    counter = 0;
+	stop = false;
+	counter = 0;
 	max_loops_done = incr(nLoops_calib, &counter, &stop);
 
 	clock_gettime(CLOCK_REALTIME, &end);
-	std::cout << "Final value of counter:" << counter << std::endl;
+	cout << "Final value of counter:" << counter << endl;
 
 	// Computing difference between start and stop timespec
 	duration.tv_sec = end.tv_sec - start.tv_sec;
@@ -229,18 +232,8 @@ int main()
 
 	duration.tv_nsec = end.tv_nsec - start.tv_nsec;
 
-	printf("Measured duration is %ld seconds and %ld nanoseconds, equivalent to %f millisconds\n",
-	duration.tv_sec, duration.tv_nsec, duration.tv_sec*1000. + duration.tv_nsec/1000000.);
+	cout << "Measured duration is " << duration.tv_sec << " seconds and " << duration.tv_nsec <<
+			" nanoseconds, equivalent to " << duration.tv_sec*1000. + duration.tv_nsec/1000000. << " milliseconds" << endl;
 
-
-	/*Amélioration:
-	- On peut faire plusieurs mesures des max_loops pour des temps différents, et moyenner les a, b obtenus pour obtenir une mesure plus fiable
-	- On peut aussi rajouter plus de points dans la courbe et interpoler la droite linéaire qui minimise un score r2
-	S'assurer que la fonction s'execute sans interruption extérieure susceptible de perturber la mesure:
-	  On parle d'execution thread-suspension-free, où l'on s'assure qu'aucun autre thread vient perturber l'execution.
-
-	  On peut déjà limiter l'execution sur un unique coeur, avec priorité haute, et utiliser non plus le temps en secondes,
-		mais le nombre de cycles passés par notre programme comme mesure du temps
-	*/
 
 }

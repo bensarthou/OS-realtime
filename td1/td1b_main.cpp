@@ -6,6 +6,8 @@
 #include <time.h>
 #include <unistd.h>
 
+using namespace std;
+
 /*!
 \brief Increment nloops time a counter value
 \param nLoops: number of loop to be done
@@ -36,7 +38,7 @@ int main(int, char* argv[])
 	incr(nLoops, &counter);
 
 	clock_gettime(CLOCK_REALTIME, &end);
-	std::cout << "Final value of pCounter:" << counter << std::endl;
+	cout << "Final value of pCounter:" << counter << endl;
 
 	// Computing difference between start and stop timespec
 	duration.tv_sec = end.tv_sec - start.tv_sec;
@@ -50,6 +52,6 @@ int main(int, char* argv[])
 
 	duration.tv_nsec = end.tv_nsec - start.tv_nsec;
 
-	printf("Measured duration is %ld seconds and %ld nanoseconds, equivalent to %f millisconds\n",
-	duration.tv_sec, duration.tv_nsec, duration.tv_sec*1000. + duration.tv_nsec/1000000.);
+	cout << "Measured duration is " << duration.tv_sec << " seconds and " << duration.tv_nsec <<
+			" nanoseconds, equivalent to " << duration.tv_sec + duration.tv_nsec/1000000000. << " seconds" << endl;
 }
